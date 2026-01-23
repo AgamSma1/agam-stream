@@ -1,536 +1,293 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Play, Info, Plus, Bell, Search, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Check, Pause, Maximize } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Play, X, Volume2, VolumeX, ChevronDown, Clock, Film, Star, ArrowRight } from 'lucide-react';
 
-/* AGAM'S STREAMING DATA
-   Series: Perfect Family
-   
-   HOW TO UPLOAD NEW EPISODES:
-   1. Copy one of the blocks below (from { to },).
-   2. Paste it at the end of the list.
-   3. Change the 'id' to the next number.
-   4. Update 'title', 'description', 'duration'.
-   5. 'image': Paste a link to your thumbnail (upload to imgur.com or use unsplash).
-   6. 'videoUrl': Paste your YouTube link or direct .mp4 link.
-*/
+/* DATA: Perfect Family Series */
 const SERIES_DATA = [
   {
     id: 4,
-    title: "Perfect Family: Ep 4",
-    description: "Starring Pankaj Tripathi, Neha Dhupia. Agam returns to the trail with renewed determination, facing the rocky ascents of the lower Himalayas.",
+    title: "The Rocky Ascent",
+    episode: "Episode 04",
+    description: "Agam returns to the trail with renewed determination. The green valleys fade into the harsh, grey reality of the lower Himalayas.",
     image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=2670&auto=format&fit=crop",
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Update this with your real link!
-    match: "98% Match",
-    duration: "50m 12s",
-    genre: "Adventure",
-    category: "Perfect Family"
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
+    duration: "50m",
+    rating: "4.9",
+    date: "Oct 24"
   },
   {
     id: 5,
-    title: "Perfect Family: Ep 5",
-    description: "Deep in the wilderness, resources start to run low. A hidden river crossing changes the course of the expedition entirely.",
+    title: "Into the Wild",
+    episode: "Episode 05",
+    description: "Resources run low. A hidden river crossing changes the course of the expedition entirely, forcing the team to make a difficult choice.",
     image: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
-    match: "95% Match",
-    duration: "49m 45s",
-    genre: "Survival",
-    category: "Perfect Family"
+    duration: "49m",
+    rating: "4.8",
+    date: "Oct 31"
   },
   {
     id: 6,
-    title: "Perfect Family: Ep 6",
-    description: "The team prepares for the most grueling leg of the journey. High altitude affects morale, but the view from base camp offers hope.",
+    title: "The Summit Push",
+    episode: "Episode 06",
+    description: "High altitude affects morale. The team prepares for the most grueling leg of the journey, but the view from base camp offers hope.",
     image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
-    match: "99% Match",
-    duration: "52m 10s",
-    genre: "Adventure",
-    category: "Perfect Family"
+    duration: "52m",
+    rating: "5.0",
+    date: "Nov 07"
   },
   {
     id: 7,
-    title: "Perfect Family: Ep 7",
-    description: "A sudden blizzard traps the team in a makeshift shelter. The camera captures the raw intensity of nature's fury at night.",
+    title: "Stormy Night",
+    episode: "Episode 07",
+    description: "A sudden blizzard traps the team. With visibility at zero, the camera captures the raw, terrifying intensity of nature's fury at night.",
     image: "https://images.unsplash.com/photo-1517056233069-42b78d21c7a4?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
-    match: "97% Match",
-    duration: "51m 30s",
-    genre: "Thriller",
-    category: "Perfect Family"
+    duration: "51m",
+    rating: "4.7",
+    date: "Nov 14"
   },
   {
     id: 8,
-    title: "Perfect Family: Finale",
-    description: "The season finale. Agam reflects on the journey from Episode 1 to now. A story of resilience, family, and the mountains.",
+    title: "The Finale",
+    episode: "Season Finale",
+    description: "Agam reflects on the journey from Episode 1 to now. A story of resilience, family, and the mountains. The final descent begins.",
     image: "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?q=80&w=2574&auto=format&fit=crop",
     videoUrl: "#", 
-    match: "New", // This triggers the "New" badge!
-    duration: "55m 05s",
-    genre: "Documentary",
-    category: "Perfect Family"
+    duration: "55m",
+    rating: "5.0",
+    date: "Nov 21"
   }
 ];
 
-// --- TOAST NOTIFICATION COMPONENT ---
-const Toast = ({ message, onClose }) => {
+// --- COMPONENTS ---
+
+const ScrollProgress = () => {
+  const [width, setWidth] = useState(0);
+
   useEffect(() => {
-    if (message) {
-      const timer = setTimeout(onClose, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [message, onClose]);
-
-  if (!message) return null;
+    const handleScroll = () => {
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scroll = `${totalScroll / windowHeight}`;
+      setWidth(Number(scroll));
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <div className="fixed top-20 right-4 z-[100] bg-white text-black px-6 py-3 rounded shadow-2xl animate-in slide-in-from-right duration-300 font-medium flex items-center gap-2">
-      <Info size={18} className="text-red-600" />
-      {message}
-    </div>
+    <div className="fixed top-0 left-0 h-1 bg-red-600 z-[100]" style={{ width: `${width * 100}%` }} />
   );
 };
 
-// --- NAVBAR ---
-const Navbar = ({ scrolled, onMenuClick }) => {
-  const [searchOpen, setSearchOpen] = useState(false);
-
-  return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ${scrolled ? 'bg-black/95 shadow-xl' : 'bg-gradient-to-b from-black/90 via-black/60 to-transparent'}`}>
-      <div className="flex items-center justify-between px-4 md:px-12 py-4">
-        <div className="flex items-center gap-8">
-          <h1 
-            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-red-600 text-2xl md:text-3xl font-bold tracking-tighter cursor-pointer hover:scale-105 transition-transform"
-          >
-            AGAM<span className="font-light text-white">STREAM</span>
-          </h1>
-          <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
-            <button 
-              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-              className="text-white font-medium cursor-pointer"
-            >
-              Home
-            </button>
-            <button 
-              onClick={() => {
-                const myListRow = document.getElementById('row-my-list');
-                if (myListRow) myListRow.scrollIntoView({ behavior: 'smooth' });
-              }} 
-              className="hover:text-white transition font-medium cursor-pointer"
-            >
-              My List
-            </button>
-          </div>
-        </div>
-        
-        <div className="flex items-center gap-6 text-white">
-          <div className={`flex items-center transition-all duration-300 ${searchOpen ? 'bg-black/50 border border-white/50 px-2 py-1 rounded' : ''}`}>
-             <Search 
-               className="w-5 h-5 cursor-pointer hover:text-gray-300" 
-               onClick={() => setSearchOpen(!searchOpen)} 
-             />
-             <input 
-               type="text" 
-               placeholder="Search titles..."
-               className={`bg-transparent border-none outline-none text-sm ml-2 transition-all duration-300 ${searchOpen ? 'w-48 opacity-100' : 'w-0 opacity-0'}`}
-             />
-          </div>
-          
-          <Bell className="w-5 h-5 cursor-pointer hover:text-gray-300" />
-          
-          <div className="flex items-center gap-2 cursor-pointer group">
-            <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center font-bold shadow-lg ring-1 ring-white/50">A</div>
-          </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
-
-// --- HERO SECTION ---
-const Hero = ({ movie, onPlay, onInfo, onToggleMute, muted }) => {
+const VideoModal = ({ movie, onClose }) => {
   if (!movie) return null;
 
   return (
-    <div className="relative h-[85vh] w-full text-white">
-      <div className="absolute inset-0">
-        <img 
-          src={movie.image} 
-          alt={movie.title} 
-          className="w-full h-full object-cover animate-in fade-in duration-1000"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-black via-black/40 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
-      </div>
-
-      <div className="absolute top-[20%] md:top-[25%] left-4 md:left-12 max-w-xl flex flex-col justify-end pb-12">
-        <div className="flex items-center gap-2 text-red-600 font-bold tracking-widest text-sm md:text-base animate-in slide-in-from-left duration-700 fade-in mb-4">
-          <span className="bg-red-600 text-white px-2 py-0.5 rounded-sm text-xs">AGAM</span> ORIGINALS
-        </div>
-        
-        <h1 className="text-4xl md:text-6xl font-black leading-none drop-shadow-lg animate-in slide-in-from-left duration-700 delay-100 fade-in max-w-[95%] mb-4">
-          {movie.title}
-        </h1>
-        
-        <p className="text-sm md:text-lg text-gray-200 line-clamp-3 drop-shadow-md animate-in slide-in-from-left duration-700 delay-200 fade-in mb-8">
-          {movie.description}
-        </p>
-        
-        <div className="flex items-center gap-4 animate-in slide-in-from-bottom duration-700 delay-300 fade-in">
-          <button 
-            onClick={() => onPlay(movie)}
-            className="flex items-center gap-2 bg-white text-black px-6 md:px-8 py-2 md:py-3 rounded hover:bg-opacity-80 active:scale-95 transition font-bold text-lg"
-          >
-            <Play className="fill-black w-6 h-6" /> Play
-          </button>
-          <button 
-            onClick={() => onInfo(movie)}
-            className="flex items-center gap-2 bg-gray-500/70 text-white px-6 md:px-8 py-2 md:py-3 rounded hover:bg-gray-500/50 active:scale-95 transition font-bold text-lg backdrop-blur-sm"
-          >
-            <Info className="w-6 h-6" /> More Info
-          </button>
-        </div>
-      </div>
-
-      <div className="absolute bottom-32 right-12 z-20 hidden md:block">
-         <button 
-          onClick={onToggleMute}
-          className="p-3 border border-white/50 rounded-full hover:bg-white/10 transition bg-black/20 backdrop-blur-sm"
-        >
-           {muted ? <VolumeX size={20} /> : <Volume2 size={20} />}
-         </button>
-      </div>
-    </div>
-  );
-};
-
-// --- CONTENT ROW ---
-const Row = ({ id, title, data, onSelect }) => {
-  const rowRef = useRef(null);
-
-  const scroll = (direction) => {
-    if (rowRef.current) {
-      const { scrollLeft, clientWidth } = rowRef.current;
-      const scrollTo = direction === 'left' 
-        ? scrollLeft - clientWidth / 2 
-        : scrollLeft + clientWidth / 2;
-      
-      rowRef.current.scrollTo({ left: scrollTo, behavior: 'smooth' });
-    }
-  };
-
-  if (!data || data.length === 0) return null;
-
-  return (
-    <div id={id} className="space-y-4 my-8 pl-4 md:pl-12 group relative z-10">
-      <h2 className="text-xl md:text-2xl font-bold text-white hover:text-gray-300 cursor-pointer transition w-fit flex items-center gap-2">
-        {title}
-      </h2>
-      
-      <div className="relative group/row">
-        <ChevronLeft 
-          onClick={() => scroll('left')}
-          className="absolute left-0 top-1/2 -translate-y-1/2 z-40 w-12 h-full bg-black/50 hover:bg-black/70 text-white cursor-pointer opacity-0 group-hover/row:opacity-100 transition-opacity p-2 hidden md:block"
-        />
-        
-        <div 
-          ref={rowRef}
-          className="flex items-center gap-2 overflow-x-scroll scrollbar-hide scroll-smooth py-4 pr-12"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {data.map((movie) => (
-            <div 
-              key={movie.id}
-              onClick={() => onSelect(movie)}
-              className="relative min-w-[200px] md:min-w-[280px] h-[120px] md:h-[160px] rounded cursor-pointer transition-transform duration-300 hover:scale-105 hover:z-20 group/item"
-            >
-              <img 
-                src={movie.image} 
-                alt={movie.title}
-                className="w-full h-full object-cover rounded shadow-md"
-              />
-              <div className="absolute inset-0 bg-black/20 group-hover/item:bg-transparent transition-colors border border-transparent group-hover/item:border-white/50 rounded" />
-              
-              {/* NEW BADGE */}
-              {movie.match === 'New' && (
-                <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
-                  NEW
-                </div>
-              )}
-
-              <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover/item:opacity-100 transition-opacity text-xs font-bold drop-shadow-md">
-                 <p className="flex items-center gap-1"><span className="text-green-400">{movie.match}</span> {movie.duration}</p>
-                 <p className="text-white line-clamp-1">{movie.title}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <ChevronRight 
-          onClick={() => scroll('right')}
-          className="absolute right-0 top-1/2 -translate-y-1/2 z-40 w-12 h-full bg-black/50 hover:bg-black/70 text-white cursor-pointer opacity-0 group-hover/row:opacity-100 transition-opacity p-2 hidden md:block"
-        />
-      </div>
-    </div>
-  );
-};
-
-// --- VIDEO PLAYER / DETAILS MODAL ---
-const VideoModal = ({ movie, onClose, isMyList, onToggleMyList, autoPlay = false }) => {
-  const [isPlaying, setIsPlaying] = useState(autoPlay);
-  const [progress, setProgress] = useState(0);
-  const [volume, setVolume] = useState(1);
-  const [isMuted, setIsMuted] = useState(false);
-
-  useEffect(() => {
-     setIsPlaying(autoPlay);
-  }, [autoPlay]);
-
-  useEffect(() => {
-    let interval;
-    if (isPlaying && (!movie?.videoUrl || movie.videoUrl === '#')) {
-      interval = setInterval(() => {
-        setProgress(prev => (prev >= 100 ? 0 : prev + 0.5));
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [isPlaying, movie]);
-
-  if (!movie) return null;
-
-  const renderPlayer = () => {
-    if (!isPlaying) {
-         return (
-             <>
-              <img src={movie.image} className="w-full h-full object-cover opacity-60" alt="background" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div 
-                  onClick={() => setIsPlaying(true)}
-                  className="w-20 h-20 bg-red-600/90 rounded-full flex items-center justify-center cursor-pointer hover:scale-110 hover:bg-red-600 transition shadow-[0_0_30px_rgba(220,38,38,0.5)]"
-                >
-                    <Play className="fill-white ml-2 w-8 h-8 text-white" />
-                </div>
-              </div>
-             </>
-         );
-    }
-
-    if (movie.videoUrl && (movie.videoUrl.includes('youtube.com') || movie.videoUrl.includes('youtu.be'))) {
-        let videoId = '';
-        if (movie.videoUrl.includes('v=')) {
-            videoId = movie.videoUrl.split('v=')[1].split('&')[0];
-        } else {
-            videoId = movie.videoUrl.split('/').pop();
-        }
-        return (
-            <div className="w-full h-full bg-black">
-                <iframe 
-                    width="100%" 
-                    height="100%" 
-                    src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} 
-                    title={movie.title}
-                    frameBorder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowFullScreen
-                ></iframe>
-                <button 
-                    onClick={() => setIsPlaying(false)}
-                    className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition z-50"
-                >
-                    Close Player
-                </button>
-            </div>
-        );
-    }
-    
-    if (movie.videoUrl && movie.videoUrl !== '#' && !movie.videoUrl.includes('youtube')) {
-         return (
-             <div className="w-full h-full bg-black flex items-center justify-center">
-                <video 
-                    src={movie.videoUrl} 
-                    className="w-full h-full object-contain" 
-                    controls 
-                    autoPlay
-                />
-                 <button 
-                    onClick={() => setIsPlaying(false)}
-                    className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition z-50"
-                >
-                    Close Player
-                </button>
-             </div>
-         );
-    }
-
-    // Fallback Player (for when no video is uploaded yet)
-    return (
-             <div className="w-full h-full bg-black flex flex-col justify-center items-center relative overflow-hidden">
-                <img 
-                  src={movie.image} 
-                  className="w-full h-full object-cover opacity-30" 
-                  alt="video content"
-                />
-                <div className="absolute inset-0 flex items-center justify-center flex-col">
-                  <div className="w-16 h-16 border-4 border-gray-600 border-t-red-600 rounded-full animate-spin mb-4"></div>
-                  <p className="text-white font-mono text-sm tracking-widest">STREAMING OFFLINE</p>
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
-                    <div className="w-full h-1 bg-gray-700 rounded cursor-pointer mb-4">
-                        <div className="h-full bg-red-600 rounded relative" style={{width: `${progress}%`}}></div>
-                    </div>
-                    
-                    <div className="flex justify-between items-center text-white">
-                        <div className="flex items-center gap-6">
-                            <button onClick={() => setIsPlaying(false)} className="hover:text-red-500 transition">
-                                <Pause size={24} className="fill-white" />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-             </div>
-    );
-  };
-
-  return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-200">
-      <div className="relative w-full max-w-5xl bg-[#181818] rounded-lg overflow-hidden shadow-2xl ring-1 ring-white/10 flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/95 backdrop-blur-md p-4 animate-in fade-in zoom-in duration-300">
+      <div className="relative w-full max-w-6xl aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/10">
         <button 
           onClick={onClose}
-          className="absolute top-4 right-4 z-50 bg-black/50 p-2 rounded-full hover:bg-white text-white hover:text-black transition"
+          className="absolute top-6 right-6 z-50 bg-black/50 hover:bg-white/20 p-2 rounded-full text-white transition-all transform hover:rotate-90"
         >
-          <X size={24} />
+          <X size={32} />
         </button>
 
-        <div className="aspect-video w-full bg-black relative group shrink-0">
-           {renderPlayer()}
-        </div>
-
-        <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-8 overflow-y-auto custom-scrollbar">
-          <div className="space-y-4">
-            <div className="flex items-center gap-4 text-sm">
-               <span className="text-green-500 font-bold">{movie.match}</span>
-               <span className="text-gray-400">{movie.duration}</span>
-               <span className="border border-gray-500 px-1 rounded text-[10px] text-gray-400">HD</span>
-            </div>
-            <h2 className="text-3xl font-bold text-white">{movie.title}</h2>
-            <p className="text-gray-300 leading-relaxed text-sm md:text-base">{movie.description}</p>
+        {movie.videoUrl && movie.videoUrl.includes('youtube') ? (
+           <iframe 
+             className="w-full h-full"
+             src={`https://www.youtube.com/embed/${movie.videoUrl.split('v=')[1]?.split('&')[0]}?autoplay=1`} 
+             title={movie.title}
+             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+             allowFullScreen
+           />
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center text-white space-y-4">
+             <div className="w-20 h-20 border-t-4 border-red-500 border-solid rounded-full animate-spin"></div>
+             <p className="font-mono tracking-widest uppercase text-sm opacity-50">Loading Stream Source...</p>
           </div>
-          
-          <div className="space-y-4 text-sm text-gray-400">
-             <div><span className="text-gray-500">Cast:</span> <span className="text-gray-200">Agam Sharma</span></div>
-             <div><span className="text-gray-500">Genres:</span> <span className="text-gray-200">{movie.genre}</span></div>
-             
-             <div className="pt-4">
-                <button 
-                  onClick={onToggleMyList}
-                  className="flex flex-col items-center gap-2 group w-full"
-                >
-                   <div className={`w-full py-2 rounded border flex items-center justify-center gap-2 transition-all ${isMyList ? 'bg-white text-black border-white' : 'border-gray-500 text-white hover:border-white'}`}>
-                      {isMyList ? <Check size={20} /> : <Plus size={20} />}
-                      <span className="font-bold uppercase tracking-wider text-xs">{isMyList ? 'In My List' : 'Add to My List'}</span>
-                   </div>
-                </button>
-             </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
 };
 
 export default function App() {
-  const [scrolled, setScrolled] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
-  const [autoPlayModal, setAutoPlayModal] = useState(false);
-  const [myListIds, setMyListIds] = useState([]);
-  const [toastMsg, setToastMsg] = useState(null);
-  const [heroMuted, setHeroMuted] = useState(true);
-  
-  const featuredMovie = SERIES_DATA.find(m => m.id === 8) || SERIES_DATA[0];
-  const categories = [...new Set(SERIES_DATA.map(item => item.category))];
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleToggleMyList = (movie) => {
-    if (myListIds.includes(movie.id)) {
-      setMyListIds(prev => prev.filter(id => id !== movie.id));
-      setToastMsg("Removed from My List");
-    } else {
-      setMyListIds(prev => [...prev, movie.id]);
-      setToastMsg("Added to My List");
-    }
-  };
-
-  const handleHeroPlay = (movie) => {
-    setSelectedMovie(movie);
-    setAutoPlayModal(true);
-  };
-
-  const handleInfo = (movie) => {
-    setSelectedMovie(movie);
-    setAutoPlayModal(false);
-  };
-
-  const getMyListMovies = () => {
-    return SERIES_DATA.filter(m => myListIds.includes(m.id));
+  const scrollToEpisodes = () => {
+    document.getElementById('episodes').scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <div className="bg-[#141414] min-h-screen text-white overflow-x-hidden font-sans selection:bg-red-600 selection:text-white pb-20">
-      <Toast message={toastMsg} onClose={() => setToastMsg(null)} />
+    <div className="bg-[#0a0a0a] min-h-screen text-white font-sans selection:bg-red-500/30 selection:text-red-200">
+      <ScrollProgress />
       
-      <Navbar scrolled={scrolled} onMenuClick={setToastMsg} />
-      
-      <Hero 
-        movie={featuredMovie} 
-        onPlay={handleHeroPlay} 
-        onInfo={handleInfo}
-        muted={heroMuted}
-        onToggleMute={() => {
-          setHeroMuted(!heroMuted);
-          setToastMsg(heroMuted ? "Unmuted" : "Muted");
-        }}
-      />
-
-      <div className="-mt-32 md:-mt-48 relative z-20 space-y-4 md:space-y-8 pb-12 pl-4 md:pl-0">
-        {categories.map((category) => (
-          <Row 
-            key={category} 
-            id={`row-${category.replace(/\s+/g, '-').toLowerCase()}`}
-            title={category} 
-            data={SERIES_DATA.filter(m => m.category === category)} 
-            onSelect={(m) => { setSelectedMovie(m); setAutoPlayModal(false); }}
-          />
-        ))}
-        
-        {/* Dynamic My List Row */}
-        {myListIds.length > 0 && (
-          <Row 
-             id="row-my-list"
-             title="My List" 
-             data={getMyListMovies()} 
-             onSelect={(m) => { setSelectedMovie(m); setAutoPlayModal(false); }}
-          />
-        )}
-      </div>
-
-      <footer className="max-w-4xl mx-auto px-12 py-12 text-gray-500 text-sm mt-12 flex flex-col items-center">
-        <div className="flex gap-6 mb-8">
-           <a href="#" className="hover:text-white transition"><i className="fab fa-instagram"></i></a>
-           <a href="#" className="hover:text-white transition"><i className="fab fa-twitter"></i></a>
-           <a href="#" className="hover:text-white transition"><i className="fab fa-youtube"></i></a>
+      {/* --- NAVIGATION --- */}
+      <nav className={`fixed w-full z-40 transition-all duration-500 px-6 py-6 flex justify-between items-center ${scrolled ? 'bg-black/80 backdrop-blur-md border-b border-white/5 py-4' : 'bg-transparent'}`}>
+        <div className="text-2xl font-black tracking-tighter">
+          AGAM<span className="text-red-600">.</span>STREAM
         </div>
-        <div className="flex gap-4 text-xs mb-4">
-           <span>© 2026 AgamStream, Inc.</span>
+        <div className="hidden md:flex gap-8 text-sm font-medium tracking-wide text-gray-400">
+          <a href="#" className="hover:text-white transition-colors">Series</a>
+          <a href="#" className="hover:text-white transition-colors">Behind the Scenes</a>
+          <a href="#" className="hover:text-white transition-colors">Cast</a>
         </div>
-        <p className="text-[10px] text-gray-600">Created by Agam Sharma</p>
+        <button className="bg-white text-black px-5 py-2 rounded-full font-bold text-sm hover:bg-gray-200 transition-transform hover:scale-105">
+          Sign In
+        </button>
+      </nav>
+
+      {/* --- CINEMATIC HERO --- */}
+      <header className="relative h-screen w-full overflow-hidden">
+        <div className="absolute inset-0">
+          <img 
+            src="https://images.unsplash.com/photo-1519681393784-d120267933ba?q=80&w=2670&auto=format&fit=crop" 
+            alt="Hero Background" 
+            className="w-full h-full object-cover scale-105 animate-[pulse_10s_ease-in-out_infinite]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-[#0a0a0a]" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-transparent to-transparent" />
+        </div>
+
+        <div className="relative z-10 h-full flex flex-col justify-center px-6 md:px-24 max-w-7xl mx-auto">
+          <span className="text-red-500 font-bold tracking-[0.3em] text-sm md:text-base mb-4 animate-in slide-in-from-bottom duration-700 fade-in">
+            ORIGINAL SERIES
+          </span>
+          <h1 className="text-6xl md:text-9xl font-black tracking-tighter text-white mb-6 leading-[0.9] mix-blend-overlay opacity-90 animate-in slide-in-from-left duration-1000">
+            PERFECT<br/>FAMILY
+          </h1>
+          <p className="max-w-xl text-lg md:text-xl text-gray-300 leading-relaxed mb-10 border-l-4 border-red-600 pl-6 animate-in slide-in-from-bottom duration-1000 delay-200">
+            A journey through the unforgiving Himalayas. Witness Agam Sharma's expedition as bonds are tested, limits are broken, and the true meaning of family is discovered.
+          </p>
+          
+          <div className="flex gap-4 animate-in zoom-in duration-1000 delay-300">
+             <button 
+               onClick={() => setSelectedMovie(SERIES_DATA[4])} // Plays latest episode
+               className="group flex items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-full font-bold tracking-wide hover:bg-red-700 transition-all"
+             >
+               <Play className="fill-white w-5 h-5 group-hover:scale-110 transition-transform" /> 
+               WATCH FINALE
+             </button>
+             <button 
+               onClick={scrollToEpisodes}
+               className="flex items-center gap-3 px-8 py-4 rounded-full font-bold tracking-wide border border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm"
+             >
+               VIEW EPISODES
+             </button>
+          </div>
+        </div>
+
+        <div className="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+          <ChevronDown className="text-white/50 w-8 h-8" />
+        </div>
+      </header>
+
+      {/* --- EDITORIAL EPISODE LIST --- */}
+      <section id="episodes" className="py-24 px-6 md:px-24 max-w-[1400px] mx-auto">
+        <div className="flex items-end justify-between mb-16 border-b border-gray-800 pb-6">
+           <div>
+             <span className="text-red-500 font-bold tracking-widest text-xs uppercase mb-2 block">Season 1</span>
+             <h2 className="text-4xl md:text-5xl font-bold">The Collection</h2>
+           </div>
+           <div className="hidden md:block text-right">
+             <div className="text-2xl font-bold">5 Episodes</div>
+             <div className="text-gray-500 text-sm">Adventure / Documentary</div>
+           </div>
+        </div>
+
+        <div className="space-y-24">
+          {SERIES_DATA.map((item, index) => (
+            <div 
+              key={item.id} 
+              className={`group flex flex-col md:flex-row gap-8 md:gap-16 items-center ${index % 2 === 1 ? 'md:flex-row-reverse' : ''}`}
+            >
+              {/* Thumbnail Card */}
+              <div 
+                className="w-full md:w-3/5 aspect-video relative rounded-2xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500 hover:shadow-red-900/20 group-hover:scale-[1.01]"
+                onClick={() => setSelectedMovie(item)}
+              >
+                <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors" />
+                
+                {/* Play Overlay */}
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-full flex items-center justify-center border border-white/50">
+                    <Play className="fill-white text-white w-8 h-8 ml-1" />
+                  </div>
+                </div>
+
+                {/* Corner Data */}
+                <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-mono border border-white/10">
+                  {item.duration}
+                </div>
+                {item.match === "New" && (
+                   <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-lg text-xs font-bold tracking-wider shadow-lg">
+                     NEW RELEASE
+                   </div>
+                )}
+              </div>
+
+              {/* Text Info */}
+              <div className="w-full md:w-2/5 space-y-6">
+                <div className="flex items-center gap-4 text-sm font-bold text-gray-500 tracking-widest uppercase">
+                   <span className="text-red-500">{item.episode}</span>
+                   <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
+                   <span>{item.date}</span>
+                </div>
+                
+                <h3 className="text-3xl md:text-5xl font-bold leading-tight group-hover:text-red-500 transition-colors cursor-pointer" onClick={() => setSelectedMovie(item)}>
+                  {item.title}
+                </h3>
+                
+                <p className="text-gray-400 leading-relaxed text-lg">
+                  {item.description}
+                </p>
+
+                <div className="flex items-center gap-6 pt-4 border-t border-gray-800">
+                   <div className="flex items-center gap-2 text-sm font-medium text-white">
+                      <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" /> {item.rating}
+                   </div>
+                   <button 
+                     onClick={() => setSelectedMovie(item)}
+                     className="text-sm font-bold flex items-center gap-2 hover:text-red-500 transition-colors"
+                   >
+                     WATCH NOW <ArrowRight className="w-4 h-4" />
+                   </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* --- FOOTER --- */}
+      <footer className="bg-[#050505] border-t border-gray-900 py-20 mt-20">
+         <div className="max-w-7xl mx-auto px-6 text-center">
+            <h2 className="text-2xl font-black tracking-tighter mb-8">AGAM<span className="text-red-600">.</span>STREAM</h2>
+            <div className="flex justify-center gap-8 mb-8">
+               {['Instagram', 'Twitter', 'YouTube'].map(social => (
+                 <a key={social} href="#" className="text-gray-500 hover:text-white transition-colors uppercase text-xs tracking-widest">
+                   {social}
+                 </a>
+               ))}
+            </div>
+            <p className="text-gray-700 text-sm">
+              © 2026 AgamStream Inc. All rights reserved. <br/>
+              Created by Agam Sharma.
+            </p>
+         </div>
       </footer>
+
+      <VideoModal movie={selectedMovie} onClose={() => setSelectedMovie(null)} />
     </div>
   );
 }
