@@ -5,7 +5,6 @@ import { Play, X, Volume2, VolumeX, ChevronDown, Clock, Film, Star, ArrowRight }
    I have set these to look for files in your "public" folder.
    Make sure you upload your images to GitHub's "public" folder with these exact names:
    - Main Background: 10.jpg
-   - Episode 4: 4.jpg
    - Episode 5: 5.jpg
    - Episode 6: 6.jpg
    - Episode 7: 7.jpg
@@ -16,59 +15,48 @@ const HERO_BACKGROUND_IMAGE = "/10.jpg";
 /* DATA: Perfect Family Series */
 const SERIES_DATA = [
   {
-    id: 4,
-    title: "The Rocky Ascent",
-    episode: "Episode 04",
-    description: "Agam returns to the trail with renewed determination. The green valleys fade into the harsh, grey reality of the lower Himalayas.",
-    image: "/4.jpg", // Looks for public/4.jpg
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
-    duration: "50m",
-    rating: "4.9",
-    date: "Oct 24"
-  },
-  {
     id: 5,
-    title: "Into the Wild",
+    title: "Empathy: Mothers & Daughters",
     episode: "Episode 05",
-    description: "Resources run low. A hidden river crossing changes the course of the expedition entirely, forcing the team to make a difficult choice.",
-    image: "/5.jpg", // Looks for public/5.jpg
+    description: "The women of the family confront the childhoods that shaped them. Old wounds reopen, but so do chances to heal. Starring Pankaj Tripathi, Neha Dhupia, Manoj Pahwa.",
+    image: "/5.jpg", 
     videoUrl: "#", 
     duration: "49m",
     rating: "4.8",
-    date: "Oct 31"
+    date: "Therapy Ka Safar"
   },
   {
     id: 6,
-    title: "The Summit Push",
+    title: "Empathy: Fathers & Sons",
     episode: "Episode 06",
-    description: "High altitude affects morale. The team prepares for the most grueling leg of the journey, but the view from base camp offers hope.",
-    image: "/6.jpg", // Looks for public/6.jpg
+    description: "A trip meant for bonding turns into a confrontation with buried fears. One moment changes everything for the men of the family. A Jar Pictures Production.",
+    image: "/6.jpg", 
     videoUrl: "#", 
     duration: "52m",
     rating: "5.0",
-    date: "Nov 07"
+    date: "Therapy Ka Safar"
   },
   {
     id: 7,
-    title: "Stormy Night",
+    title: "Coping",
     episode: "Episode 07",
-    description: "A sudden blizzard traps the team. With visibility at zero, the camera captures the raw, terrifying intensity of nature's fury at night.",
-    image: "/7.jpg", // Looks for public/7.jpg
+    description: "When life spirals, everyone finds their own way to survive - some healthy, some dangerous. And one announcement shakes the entire family.",
+    image: "/7.jpg", 
     videoUrl: "#", 
     duration: "51m",
     rating: "4.7",
-    date: "Nov 14"
+    date: "Therapy Ka Safar"
   },
   {
     id: 8,
-    title: "The Finale",
-    episode: "Season Finale",
-    description: "Agam reflects on the journey from Episode 1 to now. A story of resilience, family, and the mountains. The final descent begins.",
-    image: "/8.jpg", // Looks for public/8.jpg
+    title: "Family is Everything",
+    episode: "Episode 08",
+    description: "A wellness retreat forces the Karkarias to drop their guards and face each other honestly. But healing isn’t peaceful, especially for a family learning to love again.",
+    image: "/8.jpg", 
     videoUrl: "#", 
     duration: "55m",
     rating: "5.0",
-    date: "Nov 21"
+    date: "Season Finale"
   }
 ];
 
@@ -129,6 +117,9 @@ export default function App() {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [scrolled, setScrolled] = useState(false);
 
+  // Get the latest episode (last item in the array) for the Hero button
+  const latestEpisode = SERIES_DATA[SERIES_DATA.length - 1];
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 50);
     window.addEventListener('scroll', handleScroll);
@@ -178,11 +169,9 @@ export default function App() {
             PERFECT<br/>FAMILY
           </h1>
           
-          {/* REMOVED THE CAPTION PARAGRAPH HERE */}
-          
           <div className="flex gap-4 animate-in zoom-in duration-1000 delay-300 mt-8">
              <button 
-               onClick={() => setSelectedMovie(SERIES_DATA[4])} // Plays latest episode
+               onClick={() => setSelectedMovie(latestEpisode)} 
                className="group flex items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-full font-bold tracking-wide hover:bg-red-700 transition-all"
              >
                <Play className="fill-white w-5 h-5 group-hover:scale-110 transition-transform" /> 
@@ -210,8 +199,8 @@ export default function App() {
              <h2 className="text-4xl md:text-5xl font-bold">The Collection</h2>
            </div>
            <div className="hidden md:block text-right">
-             <div className="text-2xl font-bold">5 Episodes</div>
-             <div className="text-gray-500 text-sm">Adventure / Documentary</div>
+             <div className="text-2xl font-bold">{SERIES_DATA.length} Episodes</div>
+             <div className="text-gray-500 text-sm">Drama / Family</div>
            </div>
         </div>
 
