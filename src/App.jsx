@@ -2,16 +2,16 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Info, Plus, Bell, Search, User, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Check, Pause, Maximize } from 'lucide-react';
 
 /* MOCK DATA 
-   Updated to reflect Agam's Adventure Series (Episodes 4-8)
-   UPDATE: Replace 'videoUrl' with real YouTube links or MP4 links to see them play!
+   FIXED: Shortened titles to prevent text overlapping.
+   Added cast details to description instead.
 */
 const MOCK_DATA = [
   {
     id: 4,
-    title: "PERFECT FAMILY (Episode 04) Pankaj Tripathi | Neha Dhupia | Manoj Pahwa | Girija Godbole | Gulshan D",
-    description: "Picking up after the events of the first three parts, Agam returns to the trail with renewed determination. The terrain shifts from green valleys to rocky ascents.",
+    title: "Perfect Family: Episode 4",
+    description: "Starring Pankaj Tripathi, Neha Dhupia, Manoj Pahwa. Picking up after the events of the first three parts, Agam returns to the trail with renewed determination.",
     image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=2670&auto=format&fit=crop",
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Example YouTube Link
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
     match: "98% Match",
     duration: "50m 12s",
     genre: "Adventure",
@@ -19,7 +19,7 @@ const MOCK_DATA = [
   },
   {
     id: 5,
-    title: "Ep 5: Into the Wild",
+    title: "Perfect Family: Episode 5",
     description: "Deep in the wilderness, resources start to run low. Agam discovers a hidden river crossing that changes the course of the expedition entirely.",
     image: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
@@ -30,7 +30,7 @@ const MOCK_DATA = [
   },
   {
     id: 6,
-    title: "Ep 6: The Summit Push",
+    title: "Perfect Family: Episode 6",
     description: "The team prepares for the most grueling leg of the journey. High altitude affects morale, but the view from the base camp offers a glimmer of hope.",
     image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
@@ -41,7 +41,7 @@ const MOCK_DATA = [
   },
   {
     id: 7,
-    title: "Ep 7: Stormy Night",
+    title: "Perfect Family: Episode 7",
     description: "A sudden blizzard traps Agam in the makeshift shelter. With visibility at zero, the camera captures the raw intensity of nature's fury.",
     image: "https://images.unsplash.com/photo-1517056233069-42b78d21c7a4?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
@@ -52,7 +52,7 @@ const MOCK_DATA = [
   },
   {
     id: 8,
-    title: "Ep 8: The Final Descent",
+    title: "Perfect Family: Finale",
     description: "The season finale. After the storm clears, the descent proves more dangerous than the climb. Agam reflects on the journey from Episode 1 to now.",
     image: "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?q=80&w=2574&auto=format&fit=crop",
     videoUrl: "#", 
@@ -164,14 +164,18 @@ const Hero = ({ movie, onPlay, onInfo, onToggleMute, muted }) => {
       </div>
 
       {/* Content */}
-      <div className="absolute top-[30%] left-4 md:left-12 max-w-xl space-y-6">
+      <div className="absolute top-[25%] md:top-[30%] left-4 md:left-12 max-w-xl space-y-4 md:space-y-6">
         <div className="flex items-center gap-2 text-red-600 font-bold tracking-widest text-sm md:text-base animate-in slide-in-from-left duration-700 fade-in">
           <span className="bg-red-600 text-white px-2 py-0.5 rounded-sm text-xs">N</span> SERIES
         </div>
-        <h1 className="text-4xl md:text-6xl font-black leading-tight drop-shadow-lg animate-in slide-in-from-left duration-700 delay-100 fade-in">
+        
+        {/* FIXED: Added max-width and leading-tight to prevent overlap */}
+        <h1 className="text-3xl md:text-6xl font-black leading-tight drop-shadow-lg animate-in slide-in-from-left duration-700 delay-100 fade-in max-w-[90%]">
           {movie.title}
         </h1>
-        <p className="text-lg text-gray-200 line-clamp-3 drop-shadow-md animate-in slide-in-from-left duration-700 delay-200 fade-in">
+        
+        {/* FIXED: Added padding-top to separate description from title */}
+        <p className="text-sm md:text-lg text-gray-200 line-clamp-3 drop-shadow-md animate-in slide-in-from-left duration-700 delay-200 fade-in pt-2">
           {movie.description}
         </p>
         
