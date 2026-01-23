@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Play, Info, Plus, Bell, Search, User, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Check, Pause, Maximize } from 'lucide-react';
 
 /* MOCK DATA 
-   FIXED: Shortened titles to prevent text overlapping.
-   Added cast details to description instead.
+   FIXED: Renamed Episode 8 to just "Perfect Family".
+   Shortened other titles for cleaner look.
 */
 const MOCK_DATA = [
   {
     id: 4,
-    title: "Perfect Family: Episode 4",
-    description: "Starring Pankaj Tripathi, Neha Dhupia, Manoj Pahwa. Picking up after the events of the first three parts, Agam returns to the trail with renewed determination.",
+    title: "Perfect Family: Ep 4",
+    description: "Starring Pankaj Tripathi, Neha Dhupia. Agam returns to the trail with renewed determination.",
     image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
     match: "98% Match",
@@ -19,8 +19,8 @@ const MOCK_DATA = [
   },
   {
     id: 5,
-    title: "Perfect Family: Episode 5",
-    description: "Deep in the wilderness, resources start to run low. Agam discovers a hidden river crossing that changes the course of the expedition entirely.",
+    title: "Perfect Family: Ep 5",
+    description: "Deep in the wilderness, resources start to run low. Agam discovers a hidden river crossing.",
     image: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
     match: "95% Match",
@@ -30,8 +30,8 @@ const MOCK_DATA = [
   },
   {
     id: 6,
-    title: "Perfect Family: Episode 6",
-    description: "The team prepares for the most grueling leg of the journey. High altitude affects morale, but the view from the base camp offers a glimmer of hope.",
+    title: "Perfect Family: Ep 6",
+    description: "The team prepares for the most grueling leg of the journey. High altitude affects morale.",
     image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
     match: "99% Match",
@@ -41,8 +41,8 @@ const MOCK_DATA = [
   },
   {
     id: 7,
-    title: "Perfect Family: Episode 7",
-    description: "A sudden blizzard traps Agam in the makeshift shelter. With visibility at zero, the camera captures the raw intensity of nature's fury.",
+    title: "Perfect Family: Ep 7",
+    description: "A sudden blizzard traps Agam in the makeshift shelter. The camera captures nature's fury.",
     image: "https://images.unsplash.com/photo-1517056233069-42b78d21c7a4?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
     match: "97% Match",
@@ -52,8 +52,8 @@ const MOCK_DATA = [
   },
   {
     id: 8,
-    title: "Perfect Family: Finale",
-    description: "The season finale. After the storm clears, the descent proves more dangerous than the climb. Agam reflects on the journey from Episode 1 to now.",
+    title: "Perfect Family",
+    description: "The season finale. Agam reflects on the journey from Episode 1 to now. A story of resilience and family.",
     image: "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?q=80&w=2574&auto=format&fit=crop",
     videoUrl: "#", 
     match: "New",
@@ -163,23 +163,23 @@ const Hero = ({ movie, onPlay, onInfo, onToggleMute, muted }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
       </div>
 
-      {/* Content */}
-      <div className="absolute top-[25%] md:top-[30%] left-4 md:left-12 max-w-xl space-y-4 md:space-y-6">
-        <div className="flex items-center gap-2 text-red-600 font-bold tracking-widest text-sm md:text-base animate-in slide-in-from-left duration-700 fade-in">
+      {/* Content 
+          FIXED: Moved top position up (top-[20%]) and added spacing to prevent overlap.
+      */}
+      <div className="absolute top-[20%] md:top-[25%] left-4 md:left-12 max-w-xl flex flex-col justify-end pb-12">
+        <div className="flex items-center gap-2 text-red-600 font-bold tracking-widest text-sm md:text-base animate-in slide-in-from-left duration-700 fade-in mb-4">
           <span className="bg-red-600 text-white px-2 py-0.5 rounded-sm text-xs">N</span> SERIES
         </div>
         
-        {/* FIXED: Added max-width and leading-tight to prevent overlap */}
-        <h1 className="text-3xl md:text-6xl font-black leading-tight drop-shadow-lg animate-in slide-in-from-left duration-700 delay-100 fade-in max-w-[90%]">
+        <h1 className="text-4xl md:text-6xl font-black leading-none drop-shadow-lg animate-in slide-in-from-left duration-700 delay-100 fade-in max-w-[95%] mb-4">
           {movie.title}
         </h1>
         
-        {/* FIXED: Added padding-top to separate description from title */}
-        <p className="text-sm md:text-lg text-gray-200 line-clamp-3 drop-shadow-md animate-in slide-in-from-left duration-700 delay-200 fade-in pt-2">
+        <p className="text-sm md:text-lg text-gray-200 line-clamp-3 drop-shadow-md animate-in slide-in-from-left duration-700 delay-200 fade-in mb-8">
           {movie.description}
         </p>
         
-        <div className="flex items-center gap-4 pt-4 animate-in slide-in-from-bottom duration-700 delay-300 fade-in">
+        <div className="flex items-center gap-4 animate-in slide-in-from-bottom duration-700 delay-300 fade-in">
           <button 
             onClick={() => onPlay(movie)}
             className="flex items-center gap-2 bg-white text-black px-6 md:px-8 py-2 md:py-3 rounded hover:bg-opacity-80 active:scale-95 transition font-bold text-lg"
