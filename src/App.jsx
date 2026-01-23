@@ -3,6 +3,14 @@ import { Play, Info, Plus, Bell, Search, X, ChevronLeft, ChevronRight, Volume2, 
 
 /* AGAM'S STREAMING DATA
    Series: Perfect Family
+   
+   HOW TO UPLOAD NEW EPISODES:
+   1. Copy one of the blocks below (from { to },).
+   2. Paste it at the end of the list.
+   3. Change the 'id' to the next number.
+   4. Update 'title', 'description', 'duration'.
+   5. 'image': Paste a link to your thumbnail (upload to imgur.com or use unsplash).
+   6. 'videoUrl': Paste your YouTube link or direct .mp4 link.
 */
 const SERIES_DATA = [
   {
@@ -55,7 +63,7 @@ const SERIES_DATA = [
     description: "The season finale. Agam reflects on the journey from Episode 1 to now. A story of resilience, family, and the mountains.",
     image: "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?q=80&w=2574&auto=format&fit=crop",
     videoUrl: "#", 
-    match: "New",
+    match: "New", // This triggers the "New" badge!
     duration: "55m 05s",
     genre: "Documentary",
     category: "Perfect Family"
@@ -242,6 +250,13 @@ const Row = ({ id, title, data, onSelect }) => {
               />
               <div className="absolute inset-0 bg-black/20 group-hover/item:bg-transparent transition-colors border border-transparent group-hover/item:border-white/50 rounded" />
               
+              {/* NEW BADGE */}
+              {movie.match === 'New' && (
+                <div className="absolute top-2 right-2 bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-sm">
+                  NEW
+                </div>
+              )}
+
               <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover/item:opacity-100 transition-opacity text-xs font-bold drop-shadow-md">
                  <p className="flex items-center gap-1"><span className="text-green-400">{movie.match}</span> {movie.duration}</p>
                  <p className="text-white line-clamp-1">{movie.title}</p>
@@ -512,7 +527,7 @@ export default function App() {
            <a href="#" className="hover:text-white transition"><i className="fab fa-youtube"></i></a>
         </div>
         <div className="flex gap-4 text-xs mb-4">
-           <span>© 2024 AgamStream, Inc.</span>
+           <span>© 2026 AgamStream, Inc.</span>
         </div>
         <p className="text-[10px] text-gray-600">Created by Agam Sharma</p>
       </footer>
