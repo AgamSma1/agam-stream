@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Play, Info, Plus, Bell, Search, User, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Check, Pause, Maximize } from 'lucide-react';
+import { Play, Info, Plus, Bell, Search, X, ChevronLeft, ChevronRight, Volume2, VolumeX, Check, Pause, Maximize } from 'lucide-react';
 
-/* MOCK DATA 
-   FIXED: Renamed Episode 8 to just "Perfect Family".
-   Shortened other titles for cleaner look.
+/* AGAM'S STREAMING DATA
+   Series: Perfect Family
 */
-const MOCK_DATA = [
+const SERIES_DATA = [
   {
     id: 4,
     title: "Perfect Family: Ep 4",
-    description: "Starring Pankaj Tripathi, Neha Dhupia. Agam returns to the trail with renewed determination.",
+    description: "Starring Pankaj Tripathi, Neha Dhupia. Agam returns to the trail with renewed determination, facing the rocky ascents of the lower Himalayas.",
     image: "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?q=80&w=2670&auto=format&fit=crop",
-    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", 
+    videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ", // Update this with your real link!
     match: "98% Match",
     duration: "50m 12s",
     genre: "Adventure",
@@ -20,7 +19,7 @@ const MOCK_DATA = [
   {
     id: 5,
     title: "Perfect Family: Ep 5",
-    description: "Deep in the wilderness, resources start to run low. Agam discovers a hidden river crossing.",
+    description: "Deep in the wilderness, resources start to run low. A hidden river crossing changes the course of the expedition entirely.",
     image: "https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
     match: "95% Match",
@@ -31,7 +30,7 @@ const MOCK_DATA = [
   {
     id: 6,
     title: "Perfect Family: Ep 6",
-    description: "The team prepares for the most grueling leg of the journey. High altitude affects morale.",
+    description: "The team prepares for the most grueling leg of the journey. High altitude affects morale, but the view from base camp offers hope.",
     image: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
     match: "99% Match",
@@ -42,7 +41,7 @@ const MOCK_DATA = [
   {
     id: 7,
     title: "Perfect Family: Ep 7",
-    description: "A sudden blizzard traps Agam in the makeshift shelter. The camera captures nature's fury.",
+    description: "A sudden blizzard traps the team in a makeshift shelter. The camera captures the raw intensity of nature's fury at night.",
     image: "https://images.unsplash.com/photo-1517056233069-42b78d21c7a4?q=80&w=2670&auto=format&fit=crop",
     videoUrl: "#", 
     match: "97% Match",
@@ -52,8 +51,8 @@ const MOCK_DATA = [
   },
   {
     id: 8,
-    title: "Perfect Family",
-    description: "The season finale. Agam reflects on the journey from Episode 1 to now. A story of resilience and family.",
+    title: "Perfect Family: Finale",
+    description: "The season finale. Agam reflects on the journey from Episode 1 to now. A story of resilience, family, and the mountains.",
     image: "https://images.unsplash.com/photo-1533240332313-0db49b459ad6?q=80&w=2574&auto=format&fit=crop",
     videoUrl: "#", 
     match: "New",
@@ -97,15 +96,12 @@ const Navbar = ({ scrolled, onMenuClick }) => {
             AGAM<span className="font-light text-white">STREAM</span>
           </h1>
           <div className="hidden md:flex items-center gap-6 text-sm text-gray-300">
-            {['Home', 'TV Shows', 'Movies'].map((item) => (
-              <button 
-                key={item} 
-                onClick={() => onMenuClick(`${item} page is under construction!`)}
-                className="hover:text-white transition font-medium cursor-pointer"
-              >
-                {item}
-              </button>
-            ))}
+            <button 
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+              className="text-white font-medium cursor-pointer"
+            >
+              Home
+            </button>
             <button 
               onClick={() => {
                 const myListRow = document.getElementById('row-my-list');
@@ -126,19 +122,15 @@ const Navbar = ({ scrolled, onMenuClick }) => {
              />
              <input 
                type="text" 
-               placeholder="Titles, people, genres"
+               placeholder="Search titles..."
                className={`bg-transparent border-none outline-none text-sm ml-2 transition-all duration-300 ${searchOpen ? 'w-48 opacity-100' : 'w-0 opacity-0'}`}
              />
           </div>
           
-          <Bell 
-            className="w-5 h-5 cursor-pointer hover:text-gray-300" 
-            onClick={() => onMenuClick("No new notifications")}
-          />
+          <Bell className="w-5 h-5 cursor-pointer hover:text-gray-300" />
           
-          <div className="flex items-center gap-2 cursor-pointer group" onClick={() => onMenuClick("Profile settings coming soon")}>
-            <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center font-bold shadow-lg group-hover:ring-2 ring-white transition-all">A</div>
-            <span className="hidden md:block text-sm group-hover:underline">Agam Sharma</span>
+          <div className="flex items-center gap-2 cursor-pointer group">
+            <div className="w-8 h-8 rounded bg-gradient-to-br from-blue-600 to-blue-800 flex items-center justify-center font-bold shadow-lg ring-1 ring-white/50">A</div>
           </div>
         </div>
       </div>
@@ -152,7 +144,6 @@ const Hero = ({ movie, onPlay, onInfo, onToggleMute, muted }) => {
 
   return (
     <div className="relative h-[85vh] w-full text-white">
-      {/* Background Image */}
       <div className="absolute inset-0">
         <img 
           src={movie.image} 
@@ -163,12 +154,9 @@ const Hero = ({ movie, onPlay, onInfo, onToggleMute, muted }) => {
         <div className="absolute inset-0 bg-gradient-to-t from-[#141414] via-transparent to-transparent" />
       </div>
 
-      {/* Content 
-          FIXED: Moved top position up (top-[20%]) and added spacing to prevent overlap.
-      */}
       <div className="absolute top-[20%] md:top-[25%] left-4 md:left-12 max-w-xl flex flex-col justify-end pb-12">
         <div className="flex items-center gap-2 text-red-600 font-bold tracking-widest text-sm md:text-base animate-in slide-in-from-left duration-700 fade-in mb-4">
-          <span className="bg-red-600 text-white px-2 py-0.5 rounded-sm text-xs">N</span> SERIES
+          <span className="bg-red-600 text-white px-2 py-0.5 rounded-sm text-xs">AGAM</span> ORIGINALS
         </div>
         
         <h1 className="text-4xl md:text-6xl font-black leading-none drop-shadow-lg animate-in slide-in-from-left duration-700 delay-100 fade-in max-w-[95%] mb-4">
@@ -228,7 +216,6 @@ const Row = ({ id, title, data, onSelect }) => {
     <div id={id} className="space-y-4 my-8 pl-4 md:pl-12 group relative z-10">
       <h2 className="text-xl md:text-2xl font-bold text-white hover:text-gray-300 cursor-pointer transition w-fit flex items-center gap-2">
         {title}
-        <span className="text-xs text-blue-400 font-normal opacity-0 group-hover:opacity-100 transition-opacity">Explore All</span>
       </h2>
       
       <div className="relative group/row">
@@ -255,7 +242,6 @@ const Row = ({ id, title, data, onSelect }) => {
               />
               <div className="absolute inset-0 bg-black/20 group-hover/item:bg-transparent transition-colors border border-transparent group-hover/item:border-white/50 rounded" />
               
-              {/* Hover Metadata Mini-Preview */}
               <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover/item:opacity-100 transition-opacity text-xs font-bold drop-shadow-md">
                  <p className="flex items-center gap-1"><span className="text-green-400">{movie.match}</span> {movie.duration}</p>
                  <p className="text-white line-clamp-1">{movie.title}</p>
@@ -284,7 +270,6 @@ const VideoModal = ({ movie, onClose, isMyList, onToggleMyList, autoPlay = false
      setIsPlaying(autoPlay);
   }, [autoPlay]);
 
-  // Simulate video progress for mock player
   useEffect(() => {
     let interval;
     if (isPlaying && (!movie?.videoUrl || movie.videoUrl === '#')) {
@@ -299,7 +284,6 @@ const VideoModal = ({ movie, onClose, isMyList, onToggleMyList, autoPlay = false
 
   const renderPlayer = () => {
     if (!isPlaying) {
-         // Thumbnail View
          return (
              <>
               <img src={movie.image} className="w-full h-full object-cover opacity-60" alt="background" />
@@ -315,7 +299,6 @@ const VideoModal = ({ movie, onClose, isMyList, onToggleMyList, autoPlay = false
          );
     }
 
-    // 1. YouTube Handling
     if (movie.videoUrl && (movie.videoUrl.includes('youtube.com') || movie.videoUrl.includes('youtu.be'))) {
         let videoId = '';
         if (movie.videoUrl.includes('v=')) {
@@ -334,18 +317,16 @@ const VideoModal = ({ movie, onClose, isMyList, onToggleMyList, autoPlay = false
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowFullScreen
                 ></iframe>
-                {/* Close Overlay for usability */}
                 <button 
                     onClick={() => setIsPlaying(false)}
                     className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition z-50"
                 >
-                    Stop Playing
+                    Close Player
                 </button>
             </div>
         );
     }
     
-    // 2. Direct Video File (mp4, etc.)
     if (movie.videoUrl && movie.videoUrl !== '#' && !movie.videoUrl.includes('youtube')) {
          return (
              <div className="w-full h-full bg-black flex items-center justify-center">
@@ -359,60 +340,35 @@ const VideoModal = ({ movie, onClose, isMyList, onToggleMyList, autoPlay = false
                     onClick={() => setIsPlaying(false)}
                     className="absolute top-4 left-4 bg-black/50 text-white px-3 py-1 rounded text-sm hover:bg-red-600 transition z-50"
                 >
-                    Stop Playing
+                    Close Player
                 </button>
              </div>
          );
     }
 
-    // 3. Simulated Player (Fallback for '#')
+    // Fallback Player (for when no video is uploaded yet)
     return (
              <div className="w-full h-full bg-black flex flex-col justify-center items-center relative overflow-hidden">
-                {/* Simulated Content */}
                 <img 
                   src={movie.image} 
-                  className="w-full h-full object-cover opacity-30 animate-pulse" 
+                  className="w-full h-full object-cover opacity-30" 
                   alt="video content"
                 />
                 <div className="absolute inset-0 flex items-center justify-center flex-col">
-                  <div className="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mb-4 border-t-red-600 animate-spin"></div>
-                  <p className="text-white font-mono text-sm">Simulation: {movie.title}</p>
+                  <div className="w-16 h-16 border-4 border-gray-600 border-t-red-600 rounded-full animate-spin mb-4"></div>
+                  <p className="text-white font-mono text-sm tracking-widest">STREAMING OFFLINE</p>
                 </div>
 
-                {/* Video Controls Overlay */}
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    <div className="w-full h-1 bg-gray-600 rounded cursor-pointer mb-4 group/progress">
-                        <div 
-                          className="h-full bg-red-600 rounded relative" 
-                          style={{width: `${progress}%`}}
-                        >
-                           <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-red-600 rounded-full scale-0 group-hover/progress:scale-125 transition-transform shadow"></div>
-                        </div>
+                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/90 to-transparent">
+                    <div className="w-full h-1 bg-gray-700 rounded cursor-pointer mb-4">
+                        <div className="h-full bg-red-600 rounded relative" style={{width: `${progress}%`}}></div>
                     </div>
                     
                     <div className="flex justify-between items-center text-white">
                         <div className="flex items-center gap-6">
-                            <button onClick={() => setIsPlaying(!isPlaying)} className="hover:text-red-500 transition">
-                                {isPlaying ? <Pause size={24} className="fill-white" /> : <Play size={24} className="fill-white" />}
+                            <button onClick={() => setIsPlaying(false)} className="hover:text-red-500 transition">
+                                <Pause size={24} className="fill-white" />
                             </button>
-                            <button onClick={() => setIsPlaying(false)} className="hover:text-gray-300 text-sm font-bold">
-                                STOP
-                            </button>
-                            <div className="flex items-center gap-2 group/vol">
-                                <button onClick={() => setIsMuted(!isMuted)}>
-                                  {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
-                                </button>
-                                <input 
-                                  type="range" min="0" max="1" step="0.1" 
-                                  value={isMuted ? 0 : volume}
-                                  onChange={(e) => { setVolume(e.target.value); setIsMuted(false); }}
-                                  className="w-0 group-hover/vol:w-20 transition-all h-1 bg-white accent-red-600 rounded-lg cursor-pointer"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-4">
-                            <span className="text-xs font-mono text-gray-400">10:24 / {movie.duration}</span>
-                            <Maximize size={20} className="cursor-pointer hover:scale-110 transition" />
                         </div>
                     </div>
                 </div>
@@ -430,33 +386,24 @@ const VideoModal = ({ movie, onClose, isMyList, onToggleMyList, autoPlay = false
           <X size={24} />
         </button>
 
-        {/* Video Player Area */}
         <div className="aspect-video w-full bg-black relative group shrink-0">
            {renderPlayer()}
         </div>
 
-        {/* Info Area */}
         <div className="p-6 md:p-8 grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-8 overflow-y-auto custom-scrollbar">
           <div className="space-y-4">
             <div className="flex items-center gap-4 text-sm">
                <span className="text-green-500 font-bold">{movie.match}</span>
                <span className="text-gray-400">{movie.duration}</span>
                <span className="border border-gray-500 px-1 rounded text-[10px] text-gray-400">HD</span>
-               <span className="border border-gray-500 px-1 rounded text-[10px] text-gray-400">5.1</span>
             </div>
             <h2 className="text-3xl font-bold text-white">{movie.title}</h2>
             <p className="text-gray-300 leading-relaxed text-sm md:text-base">{movie.description}</p>
-            <div className="h-px bg-gray-700 w-full my-4"></div>
-            <div className="flex flex-col gap-2">
-               <h3 className="text-white font-bold text-lg">About Agam's Video</h3>
-               <p className="text-sm text-gray-400">This video was recorded using a Sony A7III during the winter expedition.</p>
-            </div>
           </div>
           
           <div className="space-y-4 text-sm text-gray-400">
-             <div><span className="text-gray-500">Cast:</span> <span className="text-gray-200 hover:underline cursor-pointer">Agam Sharma</span></div>
-             <div><span className="text-gray-500">Genres:</span> <span className="text-gray-200 hover:underline cursor-pointer">{movie.genre}</span></div>
-             <div><span className="text-gray-500">Tags:</span> <span className="text-gray-200">Inspiring, Visual, Outdoor</span></div>
+             <div><span className="text-gray-500">Cast:</span> <span className="text-gray-200">Agam Sharma</span></div>
+             <div><span className="text-gray-500">Genres:</span> <span className="text-gray-200">{movie.genre}</span></div>
              
              <div className="pt-4">
                 <button 
@@ -484,11 +431,8 @@ export default function App() {
   const [toastMsg, setToastMsg] = useState(null);
   const [heroMuted, setHeroMuted] = useState(true);
   
-  // Featured movie is the LATEST upload (Episode 8)
-  const featuredMovie = MOCK_DATA.find(m => m.id === 8) || MOCK_DATA[0];
-
-  // Group data by category
-  const categories = [...new Set(MOCK_DATA.map(item => item.category))];
+  const featuredMovie = SERIES_DATA.find(m => m.id === 8) || SERIES_DATA[0];
+  const categories = [...new Set(SERIES_DATA.map(item => item.category))];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -519,7 +463,7 @@ export default function App() {
   };
 
   const getMyListMovies = () => {
-    return MOCK_DATA.filter(m => myListIds.includes(m.id));
+    return SERIES_DATA.filter(m => myListIds.includes(m.id));
   };
 
   return (
@@ -545,7 +489,7 @@ export default function App() {
             key={category} 
             id={`row-${category.replace(/\s+/g, '-').toLowerCase()}`}
             title={category} 
-            data={MOCK_DATA.filter(m => m.category === category)} 
+            data={SERIES_DATA.filter(m => m.category === category)} 
             onSelect={(m) => { setSelectedMovie(m); setAutoPlayModal(false); }}
           />
         ))}
@@ -561,39 +505,16 @@ export default function App() {
         )}
       </div>
 
-      <VideoModal 
-        movie={selectedMovie} 
-        onClose={() => setSelectedMovie(null)}
-        autoPlay={autoPlayModal}
-        isMyList={selectedMovie ? myListIds.includes(selectedMovie.id) : false}
-        onToggleMyList={() => handleToggleMyList(selectedMovie)}
-      />
-
-      {/* Footer */}
-      <footer className="max-w-4xl mx-auto px-12 py-12 text-gray-500 text-sm mt-12">
-        <div className="flex gap-4 mb-4">
-           {['facebook', 'instagram', 'twitter', 'youtube'].map(social => (
-             <button key={social} onClick={() => setToastMsg(`Opening ${social}...`)} className="hover:text-white capitalize">
-                {social}
-             </button>
-           ))}
+      <footer className="max-w-4xl mx-auto px-12 py-12 text-gray-500 text-sm mt-12 flex flex-col items-center">
+        <div className="flex gap-6 mb-8">
+           <a href="#" className="hover:text-white transition"><i className="fab fa-instagram"></i></a>
+           <a href="#" className="hover:text-white transition"><i className="fab fa-twitter"></i></a>
+           <a href="#" className="hover:text-white transition"><i className="fab fa-youtube"></i></a>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-          {['Audio Description', 'Help Center', 'Gift Cards', 'Media Center', 'Investor Relations', 'Jobs', 'Terms of Use', 'Privacy'].map(link => (
-             <button key={link} onClick={() => setToastMsg("Page under construction")} className="text-left hover:underline">
-               {link}
-             </button>
-          ))}
+        <div className="flex gap-4 text-xs mb-4">
+           <span>© 2024 AgamStream, Inc.</span>
         </div>
-        <div className="mt-8 pt-8 border-t border-gray-800 flex flex-col gap-4">
-           <button onClick={() => setToastMsg("Service Code: 893-212")} className="border border-gray-500 p-2 hover:text-white w-fit">
-              Service Code
-           </button>
-           <div>
-             <p className="mb-2">© 2024 AgamStream, Inc.</p>
-             <p className="text-xs">Created by Agam Sharma. All Rights Reserved.</p>
-           </div>
-        </div>
+        <p className="text-[10px] text-gray-600">Created by Agam Sharma</p>
       </footer>
     </div>
   );
