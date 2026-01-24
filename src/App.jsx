@@ -2,9 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { Play, X, ChevronDown, Star, ArrowRight, Menu } from 'lucide-react';
 
 /* 🔥🔥🔥 IMAGE SETUP 🔥🔥🔥 
-   Ensure images 10.jpg, 5.jpg, 6.jpg, 7.jpg, 8.jpg are in your 'public' folder.
+   DESKTOP: Wide image (16:9)
+   MOBILE: Tall image (9:16)
 */
-const HERO_BACKGROUND_IMAGE = "/10.jpg";
+const HERO_BACKGROUND_IMAGE_DESKTOP = "/10.jpg";
+const HERO_BACKGROUND_IMAGE_MOBILE = "/10.jpg"; 
 
 /* DATA: Perfect Family Series */
 const SERIES_DATA = [
@@ -14,7 +16,7 @@ const SERIES_DATA = [
     episode: "Episode 05",
     description: "The women of the family confront the childhoods that shaped them. Old wounds reopen, but so do chances to heal. Starring Pankaj Tripathi, Neha Dhupia, Manoj Pahwa.",
     image: "/5.jpg", 
-    videoUrl: "#", // PASTE GOOGLE DRIVE LINK HERE
+    videoUrl: "https://drive.google.com/file/d/1dKp7N9hTFqcWh9J6tz1P1iMhzprjN7Sm/view?usp=sharing", // ✅ LINK ADDED
     duration: "49m",
     rating: "4.8",
     date: "Therapy Ka Safar"
@@ -205,14 +207,22 @@ export default function App() {
       {/* --- CINEMATIC HERO --- */}
       <header className="relative h-screen w-full overflow-hidden">
         <div className="absolute inset-0">
+          {/* Desktop Image */}
           <img 
-            src={HERO_BACKGROUND_IMAGE} 
-            alt="Hero Background" 
-            className="w-full h-full object-cover scale-105 animate-[pulse_10s_ease-in-out_infinite]"
+            src={HERO_BACKGROUND_IMAGE_DESKTOP} 
+            alt="Hero Background Desktop" 
+            className="hidden md:block w-full h-full object-cover scale-105 animate-[pulse_10s_ease-in-out_infinite]"
           />
+          {/* Mobile Image */}
+          <img 
+            src={HERO_BACKGROUND_IMAGE_MOBILE} 
+            alt="Hero Background Mobile" 
+            className="block md:hidden w-full h-full object-cover object-top"
+          />
+          
           {/* Mobile Specific Gradients for Readability */}
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#0a0a0a]" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/50 to-transparent md:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/60 to-transparent md:hidden" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent hidden md:block" />
         </div>
 
