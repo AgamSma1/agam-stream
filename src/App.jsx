@@ -38,7 +38,7 @@ const SERIES_DATA = [
     episode: "Episode 07",
     description: "When life spirals, everyone finds their own way to survive - some healthy, some dangerous. And one announcement shakes the entire family.",
     image: "/7.jpg", 
-    videoUrl: "https://www.dropbox.com/scl/fi/8tysj9p0l4yyvveb7adf9/ep7.mp4?rlkey=wpjhpyl220x9oyq7hfi7mx1d6&st=ykgs6dfb&raw=1", // ✅ DROPBOX LINK ADDED
+    videoUrl: "https://www.dropbox.com/scl/fi/8tysj9p0l4yyvveb7adf9/ep7.mp4?rlkey=wpjhpyl220x9oyq7hfi7mx1d6&st=ykgs6dfb&raw=1", 
     duration: "40m",
     rating: "4.7",
     date: "Therapy Ka Safar"
@@ -49,8 +49,8 @@ const SERIES_DATA = [
     episode: "Episode 08",
     description: "A wellness retreat forces the Karkarias to drop their guards and face each other honestly. But healing isn’t peaceful, especially for a family learning to love again.",
     image: "/8.jpg", 
-    videoUrl: "#", 
-    duration: "55m",
+    videoUrl: "https://www.dropbox.com/scl/fi/8vse0qcdwvlxvnrbmmahf/ep8.mp4?rlkey=29w1ja09oqhy26ge7qqjdrb1s&st=5f7ai7h2&raw=1", // ✅ DROPBOX LINK ADDED
+    duration: "51m",
     rating: "5.0",
     date: "Season Finale"
   }
