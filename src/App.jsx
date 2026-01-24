@@ -187,17 +187,17 @@ export default function App() {
         </div>
 
         {/* Mobile Menu Button */}
-        <button className="md:hidden z-50" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X /> : <Menu />}
+        <button className="md:hidden z-50 p-2" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
 
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-            <div className="fixed inset-0 bg-black z-40 flex flex-col items-center justify-center gap-8 text-xl font-bold animate-in fade-in duration-200">
-                <a href="#" onClick={() => setMobileMenuOpen(false)}>Series</a>
-                <a href="#" onClick={() => setMobileMenuOpen(false)}>Behind the Scenes</a>
-                <a href="#" onClick={() => setMobileMenuOpen(false)}>Cast</a>
-                <button className="bg-red-600 px-8 py-3 rounded-full mt-4">Sign In</button>
+            <div className="fixed inset-0 bg-black/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center gap-8 text-2xl font-bold animate-in fade-in duration-200">
+                <a href="#" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">Series</a>
+                <a href="#" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">Behind the Scenes</a>
+                <a href="#" onClick={() => setMobileMenuOpen(false)} className="hover:text-red-500 transition-colors">Cast</a>
+                <button className="bg-red-600 px-8 py-3 rounded-full mt-4 text-lg">Sign In</button>
             </div>
         )}
       </nav>
@@ -210,43 +210,45 @@ export default function App() {
             alt="Hero Background" 
             className="w-full h-full object-cover scale-105 animate-[pulse_10s_ease-in-out_infinite]"
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-[#0a0a0a]" />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent" />
+          {/* Mobile Specific Gradients for Readability */}
+          <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-[#0a0a0a]" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-black/50 to-transparent md:hidden" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/20 to-transparent hidden md:block" />
         </div>
 
-        <div className="relative z-10 h-full flex flex-col justify-center px-6 md:px-24 max-w-7xl mx-auto pt-20 md:pt-0">
-          <span className="text-red-500 font-bold tracking-[0.3em] text-xs md:text-sm mb-4 animate-in slide-in-from-bottom duration-700 fade-in">
+        <div className="relative z-10 h-full flex flex-col justify-end md:justify-center px-6 md:px-24 max-w-7xl mx-auto pb-32 md:pb-0">
+          <span className="text-red-500 font-bold tracking-[0.3em] text-xs md:text-sm mb-2 md:mb-4 animate-in slide-in-from-bottom duration-700 fade-in">
             ORIGINAL SERIES
           </span>
-          <h1 className="text-5xl md:text-9xl font-black tracking-tighter text-white mb-4 md:mb-6 leading-[0.9] mix-blend-overlay opacity-90 animate-in slide-in-from-left duration-1000">
+          <h1 className="text-5xl md:text-9xl font-black tracking-tighter text-white mb-6 md:mb-6 leading-[0.9] mix-blend-overlay opacity-90 animate-in slide-in-from-left duration-1000">
             PERFECT<br/>FAMILY
           </h1>
           
-          <div className="flex flex-col md:flex-row gap-4 animate-in zoom-in duration-1000 delay-300 mt-4 md:mt-8 w-full md:w-auto">
+          <div className="flex flex-col md:flex-row gap-3 md:gap-4 animate-in zoom-in duration-1000 delay-300 w-full md:w-auto">
              <button 
                onClick={() => setSelectedMovie(latestEpisode)} 
-               className="group flex justify-center items-center gap-3 bg-red-600 text-white px-8 py-3 md:py-4 rounded-full font-bold tracking-wide hover:bg-red-700 transition-all w-full md:w-auto"
+               className="group flex justify-center items-center gap-3 bg-red-600 text-white px-8 py-4 rounded-full font-bold tracking-wide hover:bg-red-700 transition-all w-full md:w-auto shadow-lg shadow-red-900/20"
              >
                <Play className="fill-white w-5 h-5 group-hover:scale-110 transition-transform" /> 
                WATCH FINALE
              </button>
              <button 
                onClick={scrollToEpisodes}
-               className="flex justify-center items-center gap-3 px-8 py-3 md:py-4 rounded-full font-bold tracking-wide border border-white/20 hover:bg-white/10 transition-all backdrop-blur-sm w-full md:w-auto"
+               className="flex justify-center items-center gap-3 px-8 py-4 rounded-full font-bold tracking-wide border border-white/30 bg-black/20 hover:bg-white/10 transition-all backdrop-blur-sm w-full md:w-auto"
              >
                VIEW EPISODES
              </button>
           </div>
         </div>
 
-        <div className="absolute bottom-10 left-0 right-0 flex justify-center animate-bounce">
+        <div className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce md:bottom-10">
           <ChevronDown className="text-white/50 w-8 h-8" />
         </div>
       </header>
 
       {/* --- EDITORIAL EPISODE LIST --- */}
-      <section id="episodes" className="py-12 md:py-24 px-4 md:px-24 max-w-[1400px] mx-auto">
-        <div className="flex items-end justify-between mb-8 md:mb-16 border-b border-gray-800 pb-4 md:pb-6">
+      <section id="episodes" className="py-16 md:py-24 px-4 md:px-24 max-w-[1400px] mx-auto">
+        <div className="flex items-end justify-between mb-10 md:mb-16 border-b border-gray-800 pb-4 md:pb-6">
            <div>
              <span className="text-red-500 font-bold tracking-widest text-[10px] md:text-xs uppercase mb-1 md:mb-2 block">Season 1</span>
              <h2 className="text-3xl md:text-5xl font-bold">The Collection</h2>
@@ -257,7 +259,7 @@ export default function App() {
            </div>
         </div>
 
-        <div className="space-y-16 md:space-y-24">
+        <div className="space-y-20 md:space-y-24">
           {SERIES_DATA.map((item, index) => (
             <div 
               key={item.id} 
@@ -265,7 +267,7 @@ export default function App() {
             >
               {/* Thumbnail Card */}
               <div 
-                className="w-full md:w-3/5 aspect-video relative rounded-xl md:rounded-2xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500 hover:shadow-red-900/20 group-hover:scale-[1.01]"
+                className="w-full md:w-3/5 aspect-video relative rounded-2xl overflow-hidden cursor-pointer shadow-2xl transition-all duration-500 hover:shadow-red-900/20 group-hover:scale-[1.01]"
                 onClick={() => setSelectedMovie(item)}
               >
                 <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
@@ -279,25 +281,25 @@ export default function App() {
                 </div>
 
                 {/* Corner Data */}
-                <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-black/60 backdrop-blur-md px-2 py-1 md:px-3 rounded-lg text-[10px] md:text-xs font-mono border border-white/10">
+                <div className="absolute top-3 right-3 md:top-4 md:right-4 bg-black/60 backdrop-blur-md px-3 py-1 rounded-lg text-[10px] md:text-xs font-mono border border-white/10">
                   {item.duration}
                 </div>
                 {item.id === 8 && (
-                   <div className="absolute top-2 left-2 md:top-4 md:left-4 bg-red-600 text-white px-2 py-1 md:px-3 rounded-lg text-[10px] md:text-xs font-bold tracking-wider shadow-lg">
+                   <div className="absolute top-3 left-3 md:top-4 md:left-4 bg-red-600 text-white px-3 py-1 rounded-lg text-[10px] md:text-xs font-bold tracking-wider shadow-lg">
                      NEW
                    </div>
                 )}
               </div>
 
               {/* Text Info */}
-              <div className="w-full md:w-2/5 space-y-3 md:space-y-6">
+              <div className="w-full md:w-2/5 space-y-4 md:space-y-6">
                 <div className="flex items-center gap-3 md:gap-4 text-xs md:text-sm font-bold text-gray-500 tracking-widest uppercase">
                    <span className="text-red-500">{item.episode}</span>
                    <span className="w-1 h-1 bg-gray-500 rounded-full"></span>
                    <span>{item.date}</span>
                 </div>
                 
-                <h3 className="text-2xl md:text-5xl font-bold leading-tight group-hover:text-red-500 transition-colors cursor-pointer" onClick={() => setSelectedMovie(item)}>
+                <h3 className="text-3xl md:text-5xl font-bold leading-tight group-hover:text-red-500 transition-colors cursor-pointer" onClick={() => setSelectedMovie(item)}>
                   {item.title}
                 </h3>
                 
