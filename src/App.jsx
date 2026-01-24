@@ -27,7 +27,7 @@ const SERIES_DATA = [
     episode: "Episode 06",
     description: "A trip meant for bonding turns into a confrontation with buried fears. One moment changes everything for the men of the family. A Jar Pictures Production.",
     image: "/6.jpg", 
-    videoUrl: "https://www.dropbox.com/scl/fi/gcn8og7je0cfay3myqta6/ep6.mp4?rlkey=7slsbtydqznlvhfc4z950v6nm&st=z27owx8g&raw=1", // ✅ DROPBOX LINK ADDED
+    videoUrl: "https://www.dropbox.com/scl/fi/gcn8og7je0cfay3myqta6/ep6.mp4?rlkey=7slsbtydqznlvhfc4z950v6nm&st=z27owx8g&raw=1", 
     duration: "37m",
     rating: "5.0",
     date: "Therapy Ka Safar"
@@ -38,8 +38,8 @@ const SERIES_DATA = [
     episode: "Episode 07",
     description: "When life spirals, everyone finds their own way to survive - some healthy, some dangerous. And one announcement shakes the entire family.",
     image: "/7.jpg", 
-    videoUrl: "#", 
-    duration: "51m",
+    videoUrl: "https://www.dropbox.com/scl/fi/8tysj9p0l4yyvveb7adf9/ep7.mp4?rlkey=wpjhpyl220x9oyq7hfi7mx1d6&st=ykgs6dfb&raw=1", // ✅ DROPBOX LINK ADDED
+    duration: "40m",
     rating: "4.7",
     date: "Therapy Ka Safar"
   },
