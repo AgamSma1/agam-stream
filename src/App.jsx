@@ -16,8 +16,8 @@ const SERIES_DATA = [
     episode: "Episode 05",
     description: "The women of the family confront the childhoods that shaped them. Old wounds reopen, but so do chances to heal. Starring Pankaj Tripathi, Neha Dhupia, Manoj Pahwa.",
     image: "/5.jpg", 
-    videoUrl: "https://drive.google.com/file/d/1dKp7N9hTFqcWh9J6tz1P1iMhzprjN7Sm/view?usp=sharing", // ✅ LINK ADDED
-    duration: "49m",
+    videoUrl: "https://drive.google.com/file/d/1dKp7N9hTFqcWh9J6tz1P1iMhzprjN7Sm/view?usp=sharing", 
+    duration: "43m",
     rating: "4.8",
     date: "Therapy Ka Safar"
   },
@@ -27,8 +27,8 @@ const SERIES_DATA = [
     episode: "Episode 06",
     description: "A trip meant for bonding turns into a confrontation with buried fears. One moment changes everything for the men of the family. A Jar Pictures Production.",
     image: "/6.jpg", 
-    videoUrl: "#", 
-    duration: "52m",
+    videoUrl: "https://www.dropbox.com/scl/fi/gcn8og7je0cfay3myqta6/ep6.mp4?rlkey=7slsbtydqznlvhfc4z950v6nm&st=z27owx8g&raw=1", // ✅ DROPBOX LINK ADDED
+    duration: "37m",
     rating: "5.0",
     date: "Therapy Ka Safar"
   },
